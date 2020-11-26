@@ -1,16 +1,16 @@
 import React from 'react';
 import { Logo, HeaderContainer } from './styles';
 
+import Icone from '../../assets/icone.jpg';
 
 function Header(props) {
     return (
         <>
           <HeaderContainer>
-              <Logo src={} alt='Pitu - Encurtador de URL' />
+              <Logo src={Icone} alt='Pitu - Encurtador de URL' />
               <h1>Pitu</h1>
               <p>{props.children}</p>
           </HeaderContainer>
-    
         </>
     )
 }
