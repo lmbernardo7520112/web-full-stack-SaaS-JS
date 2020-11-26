@@ -1,8 +1,8 @@
 import React from 'react';
 import Header from '../../components/Header';
-import { Container, InputGroup, FormControl, Button, Alert } from 'react-bootstrap';
+import { Container, InputGroup, FormControl, Button, Alert, Spinner } from 'react-bootstrap';
 import { ContentContainer, Form } from './styles';
-
+import ShortenerService from '../../services/shortenerService';
 
 class HomePage extends React.Component {
     constructor(props) {
@@ -11,17 +11,44 @@ class HomePage extends React.Component {
         this.setState = {
             isLoading: false,
             url:'',
-            shortenedURL: '',
+            code: '',
             errorMessage: '',
         }
     }
+    
+    handleSubmit = async(event) => {
+        event.preventDefault();
 
+        const { url } = this.state;
+
+        this.setState({ isLoading: true, errorMessage:'' });
+
+        if(!url) {
+            this.setState({ isLoading: false, errorMessage: 'Informe uma URL para encurtar' });
+        } else {
+            try {
+              const service = new ShortenerService();
+              const result = await service.generate({ url });
+
+              this.setState({ isLoading: false, code: result.code});
+            } catch (error) {
+              this.setState({ isLoading: false, errorMessage: 'Ops, ocorreu um erro ao tentar encurtar a url' });
+            }
+        }
+    }
+
+    copyToClipboard = () => {
+        const element = this.inputURL;
+        element.select();
+        document.execCommand('copy');
+    }
     render() {
+        const { isLoading, errorMessage, code } = this.state; 
         return (
             <Container>
                 <Header>Seu novo encurtador de URL. :)</Header>
                 <ContentContainer>
-                    <Form>
+                    <Form onSubmit={this.handleSubmit}>
                         <InputGroup>
                         <FormControl placeholder="Digite a URL para encurtar"
                         defaultValue=""
@@ -31,7 +58,25 @@ class HomePage extends React.Component {
                         <Button variant="primary" type="submit">Encurtar</Button>
                         </InputGroup.Append>
                         </InputGroup>
-
+                        {isLoading ? (
+                            <Spinner animation="border" />
+                        ) : (
+                            code && (
+                                <>
+                                <InputGroup>
+                                  <FormControl
+                                    autoFocus={true}
+                                    defaultValue={'https://pitu.tk/${code}'}
+                                    ref={(input) => this.inputURL = input}
+                                  />
+                                  <InputGroup.Append>
+                                    <Button variant="outline-secondary" onClick={() => this.copyToClipboard}>Copiar</Button>
+                                  </InputGroup.Append>
+                                </InputGroup>
+                                  <p>Para acompanhar as estatísticas, acesse https://pitu.tk/{code}</p>
+                                </>
+                            )
+                        )}
                     </Form>
                 </ContentContainer>
             </Container>
