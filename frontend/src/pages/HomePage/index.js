@@ -42,6 +42,7 @@ class HomePage extends React.Component {
         element.select();
         document.execCommand('copy');
     }
+
     render() {
         const { isLoading, errorMessage, code } = this.state; 
 
@@ -78,7 +79,7 @@ class HomePage extends React.Component {
                                 </>
                             )
                         )}
-                        errorMessage && <Alert variant="danger">{errorMessage}</Alert>
+                        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
                     </Form>
                 </ContentContainer>
             </Container>
