@@ -20,3 +20,9 @@ export const StatsBox = styled.div`
     text-align: center;
     margin: .5rem;
     `;
+
+    export const StatsBoxTitle = styled.div`
+    font-weight:500;
+    padding: 0.25rem;
+    display: block;
+    `;
