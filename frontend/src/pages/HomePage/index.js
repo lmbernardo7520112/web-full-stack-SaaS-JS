@@ -8,7 +8,7 @@ class HomePage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.setState = {
+        this.state = {
             isLoading: false,
             url:'',
             code: '',
@@ -44,6 +44,7 @@ class HomePage extends React.Component {
     }
     render() {
         const { isLoading, errorMessage, code } = this.state; 
+
         return (
             <Container>
                 <Header>Seu novo encurtador de URL. :)</Header>
@@ -77,6 +78,7 @@ class HomePage extends React.Component {
                                 </>
                             )
                         )}
+                        errorMessage && <Alert variant="danger">{errorMessage}</Alert>
                     </Form>
                 </ContentContainer>
             </Container>

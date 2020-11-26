@@ -18,7 +18,7 @@ class ShortenerService {
     }
 
     async generate(model) {
-        const result = await this.api.post('links', url)
+        const result = await this.api.post('links', model)
     }
 }
 
