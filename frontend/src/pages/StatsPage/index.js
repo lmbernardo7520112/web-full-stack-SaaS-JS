@@ -2,10 +2,11 @@ import React from 'react';
 import Header from "../../components/Header";
 import { Container } from 'react-bootstrap';
 
-import ShortenetService from '../../services/shortenerService';
+
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StatsContainer, StatsBox, StatsRow, StatsBoxTitle } from './styles';
+import ShortenerService from '../../services/shortenerService';
 
 
 class StatsPage extends React.Component {
@@ -15,9 +16,26 @@ class StatsPage extends React.Component {
         this.state = {
             isLoading: false,
             shortnedURL: {},
-            errorMessage: 'Error',
+            errorMessage: '',
         }
     }
+
+    async componentDidMount() {
+        const { code } = this.props.match.params;
+
+        try {
+            const service = new ShortenerService();
+            
+            const shortnedURL = await service.getStats(code);
+
+            this.setState({ isLoading: false, shortnedURL});
+
+        } catch (error) {
+            this.setState({ isLoading: false, errorMessage: 'Ops, a url solicitada não existe'});
+
+        }
+    }
+
 
     render() {
         const {errorMessage, shortnedURL} = this.state;
@@ -32,7 +50,21 @@ class StatsPage extends React.Component {
                         <p className="btn btn-primary "href="/">Encurtar uma nova URL</p>
                     </StatsContainer>
                 ) : (
-                    <p>Resultado</p>
+                    <StatsContainer className="text-center">
+                        <p><b>https://pitu.tk/{shortnedURL.code}</b></p>
+                        <p>Redirecionar para:<br/>{shortnedURL.url}</p>
+                        <StatsRow>
+                            <StatsBox>
+                                <b>{shortnedURL.hits}</b>
+                                <StatsBoxTitle>Visitas</StatsBoxTitle>
+                            </StatsBox>
+                            <StatsBox>
+                                <b>{shortnedURL.relativeDate}</b>
+                                <StatsBoxTitle>Última Visita</StatsBoxTitle>
+                            </StatsBox>
+                        </StatsRow>
+                        <a className="btn-primary" href="/">Encurtar nova URL</a>
+                    </StatsContainer>
                 )}
             </Container>
         )
