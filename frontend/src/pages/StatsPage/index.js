@@ -7,7 +7,8 @@ import { Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { StatsContainer, StatsBox, StatsRow, StatsBoxTitle } from './styles';
 import ShortenerService from '../../services/shortenerService';
-
+import { parseISO, formatRelative } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 class StatsPage extends React.Component {
     constructor(props) {
@@ -27,6 +28,15 @@ class StatsPage extends React.Component {
             const service = new ShortenerService();
             
             const shortnedURL = await service.getStats(code);
+
+            const parsedDate = parseISO(shortnedURL.updatedAt);
+            const currentDate = new Date();
+
+            const relativeDate = formatRelative(parsedDate, currentDate, {
+                    locale: ptBR,
+            });
+
+            shortnedURL.relativeDate = relativeDate;
 
             this.setState({ isLoading: false, shortnedURL});
 
@@ -52,7 +62,7 @@ class StatsPage extends React.Component {
                 ) : (
                     <StatsContainer className="text-center">
                         <p><b>https://pitu.tk/{shortnedURL.code}</b></p>
-                        <p>Redirecionar para:<br/>{shortnedURL.url}</p>
+                        <p>Redirecionar para: <br/>{shortnedURL.url}</p>
                         <StatsRow>
                             <StatsBox>
                                 <b>{shortnedURL.hits}</b>
