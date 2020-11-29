@@ -3,6 +3,8 @@ web-full-stack-SaaS-JS Criação de microserviço SaaS encurtamento de urls real
 
 Link para encurtador realizado na atividade: http://www.pitulmb.tk/
 
+Professores/colaboradores @luiztools e @danielcsrs
+
 Senhas divulgadas nas aulas da semana:
 1# FOCO
 2# PERSISTÊNCIA
